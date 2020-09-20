@@ -168,3 +168,56 @@ Response structure:
     "answerDate": 1600622876227
 }
 ```
+
+## Database schema
+
+### Table `question`
+
+* `id` _VARCHAR(36) NOT NULL_
+
+  String representation of a UUID. This is the table's primary key
+
+* `question` _TEXT NOT NULL_
+
+  The question text
+
+* `question_date` _BIGINT NOT NULL_
+
+  The time (in milliseconds since the Unix epoch) the question was originally asked
+
+* `answer` _TEXT_
+
+  The text of the most recent answer. May be null if the question has not yet been answered.
+
+* `answer_date` _BIGINT_
+
+  The time (in milliseconds since the Unix epoch) the question was most recently answered. May be null if the question has not yet been answered.
+
+## Further Improvements
+
+Had time permitted, here are the areas I would focus on for improvement:
+
+### Tests
+
+Unit tests & integration tests are a must for production ready software. But they take time to write.
+
+### Database
+
+Time and resource constraints of the exercise required an embedded database (SQLite) so that the code could run in a self contained package. Were this a production system, I would have built the database using Cassandra or DynamoDB (if using AWS). The database schema is a straight forward key-value store, and does not rely on any relational queries, so such a migration would require no change to the queries.
+
+### Docker / Lambda
+
+Depending on the deployment environment, it would make more sense to bundle this app up into a docker container. If deploying in AWS, the API endpoints could be split into separate Lambda functions, and hosted behind API Gateway, with the front end code served from S3.
+
+### Logging
+
+In a production environment, logs (access & error logs) should be sent to a log aggregation and analysis service, like Graylog or LogStash.
+
+### Feature enhancements
+
+* I would have liked to support markdown syntax for the questions and answers. This would not change much about the backend (database or API) but would have required some additionaly front-end work.
+* I would like to have an audit trail or wiki-like versioning for the answers, but this was explicitly out of scope.
+* Questions and answers should be tied to user accounts, but this was explicitly out of scope.
+* The user who originally asked a question should be able to accept an answer and prevent further edits.
+* There should be a search feature
+* The front-end should expose a method to change the sort order
