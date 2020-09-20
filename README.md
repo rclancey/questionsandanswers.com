@@ -36,7 +36,7 @@ $ cd ../go
 $ ./questionsandanswers -port 8080 -default-proxy http://localhost:3000/
 ```
 
-Now, you can point your browser to http://localhost:8080/ and go to town.
+Now, you can point your browser to [http://localhost:8080/](http://localhost:8080/) and go to town.
 
 ## Production deployment
 
@@ -45,6 +45,8 @@ Production deployment is a pretty bare bones operation for this exercise.  In th
 ```sh
 $ ./bin/startup.sh
 ```
+
+The app should now be available at http://YOURHOST:8080/
 
 ## API Calls
 
@@ -200,6 +202,10 @@ Had time permitted, here are the areas I would focus on for improvement:
 ### Tests
 
 Unit tests & integration tests are a must for production ready software. But they take time to write.
+
+### TLS
+
+No publicly available website should run without TLS (HTTPS) encryption. [Let's Encrypt](https://letsencrypt.org/) offers easy, free certificates. However, those certificates are only valid for publicly-accessible domain names, which makes development on `localhost` more problematic.
 
 ### Database
 
