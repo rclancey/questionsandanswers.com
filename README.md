@@ -46,3 +46,125 @@ Production deployment is a pretty bare bones operation for this exercise.  In th
 $ ./bin/startup.sh
 ```
 
+## API Calls
+
+### List questsions & answers
+
+```
+GET /api/questions?<PARAMS>
+```
+
+Query parameters (URL encoded):
+
+* `count` _integer_
+
+  Maximum number of results to return per page
+
+  Default: 10
+
+  Max: 100
+
+* `page` _integer_
+
+  Page number in result set (where first page is zero)
+
+  Default: 0
+
+* `sort` _string_
+
+  Sort order for results. Can be one of the following:
+
+  * `questionDate` ascending date question was originally asked
+  * `-questionDate` descending date question was originally asked
+  * `answerDate` ascending date question was most recently answered
+  * `-answerDate` descending date question was most recently answered
+
+  Default: `-questionDate`
+
+Response structure:
+
+```json
+{
+    "meta": {
+        "pageNum": 3,
+        "pageSize": 100,
+        "resultCount": 100,
+        "sortOrder": "-questionDate",
+        "prevPage": "/api/questions?count=100&page=2&sort=-questionDate",
+        "thisPage": "/api/questions?count=100&page=3&sort=-questionDate",
+        "nextPage": "/api/questions?count=100&page=4&sort=-questionDate",
+        "totalPages": 10,
+        "totalResults": 950
+    },
+    "results": [
+        {
+            "id": "12345678-90ab-cdef-1234-567890abcdef",
+            "question": "Why does it always rain on me?",
+            "questionDate": 1600622848050,
+            "answer": "Because you lied when you were seventeen.",
+            "answerDate": 1600622876227
+        },
+        {
+            "id": "abcdef12-3456-7890-abcd-ef1234567890",
+            "question": "Who will save your soul?",
+            "questionDate": 1600622818050
+        }
+    ]
+}
+```
+
+### Get question by ID
+
+```
+GET /api/question/12345678-90ab-cdef-1234-567890abcdef
+```
+
+Response structure:
+
+```json
+{
+    "id": "12345678-90ab-cdef-1234-567890abcdef",
+    "question": "Why does it always rain on me?",
+    "questionDate": 1600622848050,
+    "answer": "Because you lied when you were seventeen.",
+    "answerDate": 1600622876227
+}
+```
+
+### Create a question
+
+```
+POST /api/question
+```
+
+The request body should be the plain text of the question (`text/plain`).
+
+Response structure:
+
+```json
+{
+    "id": "abcdef12-3456-7890-abcd-ef1234567890",
+    "question": "Who will save your soul?",
+    "questionDate": 1600622818050
+}
+```
+
+### Answer a question
+
+```
+PUT /api/question/12345678-90ab-cdef-1234-567890abcdef
+```
+
+The request body should be the plain text of the question (`text/plain`).
+
+Response structure:
+
+```json
+{
+    "id": "12345678-90ab-cdef-1234-567890abcdef",
+    "question": "Why does it always rain on me?",
+    "questionDate": 1600622848050,
+    "answer": "Because you lied when you were seventeen.",
+    "answerDate": 1600622876227
+}
+```
